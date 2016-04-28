@@ -15,5 +15,11 @@
         "q": "^1.4.1",
         "request": "^2.58.0",
         "rootpath": "^0.1.2"
-    }
+    },
+}, 
+21   "scripts": { 
+22   "start": "node server.js" 
+23 }, 
+24 "main": "server.js" 
+
 }
