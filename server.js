@@ -30,7 +30,7 @@ app.use('/api/users', require('./controllers/api/users.controller'));
 
 // make '/app' default route
 app.get('/', function (req, res) {
-    return res.redirect('/app');
+    return res.redirect('Deepak Test');
 });
 
 // start server
