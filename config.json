@@ -1,5 +1,5 @@
 ﻿{
-    "connectionString": "mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/nodejs",
+    "connectionString": process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +  process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" + process.env.OPENSHIFT_MONGODB_DB_HOST + "/nodejs",
     "apiUrl":  "http://$OPENSHIFT_NODEJS_IP:8080/api",
     "secret": "REPLACE THIS WITH YOUR OWN SECRET, IT CAN BE ANY STRING"
 }
