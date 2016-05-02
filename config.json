@@ -1,5 +1,5 @@
 {
-    "connectionString": "localhost:27017/test",
-    "apiUrl":  "http://localhost:3000/api",
+    "connectionString": "process.env.OPENSHIFT_MONGODB_DB_URL/nodejs",
+    "apiUrl":  "http://process.env.OPENSHIFT_MONGODB_DB_URL:8080/api",
     "secret": "REPLACE THIS WITH YOUR OWN SECRET, IT CAN BE ANY STRING"
 }
