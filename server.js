@@ -10,6 +10,10 @@ var config = require('config.json');
 app.set('port', process.env.OPENSHIFT_NODEJS_PORT || 8080);
 app.set('ip', process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
 
+http.createServer(app).listen(app.get('port'), app.get('ip'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
+});
+
 mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
     mongoURLLabel = "";
 
@@ -33,9 +37,31 @@ if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
   }
 }
 
-http.createServer(app).listen(app.get('port'), app.get('ip'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
+var db = null,
+    dbDetails = new Object();
+
+var initDb = function(callback) {
+  if (mongoURL == null) return;
+
+  var mongodb = require('mongodb');
+  if (mongodb == null) return;
+
+  mongodb.connect(mongoURL, function(err, conn) {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    db = conn;
+    dbDetails.databaseName = db.databaseName;
+    dbDetails.url = mongoURLLabel;
+    dbDetails.type = 'MongoDB';
+
+    console.log('Connected to MongoDB at: %s', mongoURL);
+  });
+};
+
+
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
