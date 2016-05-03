@@ -10,6 +10,29 @@ var config = require('config.json');
 app.set('port', process.env.OPENSHIFT_NODEJS_PORT || 8080);
 app.set('ip', process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
 
+mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
+    mongoURLLabel = "";
+
+if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
+  var mongoServiceName = process.env.DATABASE_SERVICE_NAME.toUpperCase(),
+      mongoHost = process.env[mongoServiceName + '_SERVICE_HOST'],
+      mongoPort = process.env[mongoServiceName + '_SERVICE_PORT'],
+      mongoDatabase = process.env[mongoServiceName + '_DATABASE'],
+      mongoPassword = process.env[mongoServiceName + '_PASSWORD']
+      mongoUser = process.env[mongoServiceName + '_USER'];
+
+  if (mongoHost && mongoPort && mongoDatabase) {
+    mongoURLLabel = mongoURL = 'mongodb://';
+    if (mongoUser && mongoPassword) {
+      mongoURL += mongoUser + ':' + mongoPassword + '@';
+    }
+    // Provide UI label that excludes user id and pw
+    mongoURLLabel += mongoHost + ':' + mongoPort + '/' + mongoDatabase;
+    mongoURL += mongoHost + ':' +  mongoPort + '/' + mongoDatabase;
+
+  }
+}
+
 http.createServer(app).listen(app.get('port'), app.get('ip'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
